@@ -9,3 +9,7 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
+
+// github에 올라갈때는 node_modules가 업로드 안됨
+// 타 pc에 실행할때는 clone하고
+// 터미널에 npm install 입력하여 node_modules를 생성하고 실행
