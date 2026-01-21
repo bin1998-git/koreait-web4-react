@@ -9,8 +9,8 @@ export default function Router02() {
     <BrowserRouter>
     <Routes>
         {/* :id -> 나중에 useParams의 key값이 id가 됨 */}
-        <Route path="/user/:id" element={<UserDetail />}/>
-        <Route />
+        <Route path="/user/:id/:name" element={<UserDetail />}/>
+        <Route path="/" element={<UserList />}/>
     </Routes>
     </BrowserRouter>
   )
@@ -20,7 +20,7 @@ export default function Router02() {
 // localhost:5173/user/3
 // -> id가 3번인 사용자 조회
 function UserDetail() {
-    const { id }= useParams(); // url에서 id 추출
+    const { id, name }= useParams(); // url에서 id, name 추출
 
     return (
         <div>
@@ -29,4 +29,28 @@ function UserDetail() {
             <Link to="/">목록으로</Link>
         </div>
     )
+}
+
+function UserList () {
+    // 외부에서 받아온데이터
+  const users = [
+    {id: 1, name: "김철수"},
+    {id: 2, name: "박철수"},
+    {id: 3, name: "이철수"},
+]
+   // 
+  return (
+    <div>
+      <h2>구독자 목록</h2>
+      {users.map((user) => {
+        const {id,name} = user;
+        return (
+        <div key={id}>
+          {/* id정보를 url로 전달 */}
+          <Link to={`/user/${id}/${name}`}>{name}</Link>
+        </div>
+        )
+      })}
+    </div>
+  )
 }
