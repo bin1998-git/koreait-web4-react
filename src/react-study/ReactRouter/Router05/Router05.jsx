@@ -1,6 +1,7 @@
 import { keyframes } from '@emotion/react';
 import React from 'react'
 import { BrowserRouter, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
+import { useToastStore } from '../../Zustand/store/toastStore';
 
 
 export default function Router05() {
@@ -16,7 +17,7 @@ export default function Router05() {
 
 // url: "/"
 function OrderList () {
-    
+    const {showToast} = useToastStore();
     const navigate = useNavigate();
 
     const orders = [
@@ -31,6 +32,7 @@ function OrderList () {
     return(
         <div>
             <h1>주문목록</h1>
+            <button onClick={() => showToast("라우터공부중")}>토스트테스트</button>
             <div>
                 {/* orders를 map을 사용하여 카드형식으로 뿌려주세요
                     상품이름만 보이면 됩니다
