@@ -21,3 +21,4 @@ export const useModalStore = create((set) => {
     // set은 리턴값인 js객체를
     // {...prev, key: value}로 조작하여 대입해주는 역할
 });
+

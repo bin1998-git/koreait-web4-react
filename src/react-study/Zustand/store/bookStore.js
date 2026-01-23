@@ -19,5 +19,52 @@ export const useCurrentBook = create((set) => {
                 book: newBook
             }
         })
+        // set을써서 전역상태인 book의 필드 
+        // 일부만 업데이트 가능할까?
+    }
+});
+
+export const useBookList = create((set) => {
+    return {
+
+        // R
+        books: [{
+            id: 1,
+            title: "자바의정석",
+            author: "남궁성",
+            price: "30000"
+        }],
+
+        // c - add
+        addBook: (book) => set((prev) => {
+            return {
+                ...prev,
+                // spread로 없던 id key 추가
+                books: [...prev.books, {...book, id: Date.now()}]
+            }
+        }),
+        // u - update
+        updateBook: (id, updatePrice) => set((prev) => {
+            return {
+                ...prev,
+                // map(), filter() -> 새로운 []을 리턴
+                books: prev.books.map((book) => {
+                    return book.id === id 
+                    ? {...book, "price": updatePrice}
+                    : book
+                })
+            }
+        }),
+
+
+        // d - remove
+        // 내가 전달해준 이것만 뺴고 나머지만 남겨줘
+        removeBook: (id) => set((prev) => {
+            return {
+                ...prev,
+                books: prev.books.filter((book) => book.id !== id)
+            }
+        })
     }
 })
+
