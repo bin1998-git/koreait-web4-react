@@ -9,6 +9,10 @@ import Axios06 from "./Axios/Axios06";
 import UserRouter from "./Axios/UserPostList/UserRouter";
 import Emotion01 from "./Emotion/Emotion01";
 import Emotion02 from "./Emotion/Emotion02";
+import ReactQuery01 from "./ReactQuery/ReactQuery01";
+import ReactQuery02 from "./ReactQuery/ReactQuery02";
+import ReactQuery03 from "./ReactQuery/ReactQuery03";
+import ReactQuery04 from "./ReactQuery/ReactQuery04";
 import Router01 from "./ReactRouter/Router01/Router01";
 import Router02 from "./ReactRouter/Router02/Router02";
 import Router03 from "./ReactRouter/Router03.jsx/Router03";
@@ -41,9 +45,13 @@ export default function Study() {
         17: <UserRouter />,
         18: <Axios04 />,
         19: <Axios05 />,
-        20: <Axios06 />
+        20: <Axios06 />,
+        21: <ReactQuery01 />,
+        22: <ReactQuery02 />,
+        23: <ReactQuery03 />,
+        24: <ReactQuery04 />,
     };
 
 
-  return stateStudy[20];
+  return stateStudy[24];
 }
