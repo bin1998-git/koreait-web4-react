@@ -58,4 +58,60 @@ export const useAddBulkProducts = () => {
             console.log("에러발생!");
         }
     });
+
 }
+
+// 전체상품 조회
+export const useGetAllProducts = () => {
+  const url = "http://localhost:8080/product/all";
+  return useQuery({
+    queryKey: ["getAllProduct"],
+    queryFn: async () => {
+      const response = await axios.get(url);
+      return response.data;
+    }
+  });
+}
+
+
+const updateProductApi = async (id, product) => {
+    const url = `http://localhost:8080/product/${id}`
+    const response = await axios.put(url, product);
+    return response.data;
+}
+
+export const useUpdateProduct = () => {
+    // put요청 이후에 자동으로 get요청?
+    // -> 캐시무효화로 RQ라이브러리가 자동으로 요청하게
+    const queryClient = useQueryClient();
+    return useMutation({
+        // mutate는 첫번째 매개변수만 활용가능
+        // 두번째 매개변수 -> js객체(옵션설정) 고정
+        // -> js객체에 인자 여러개 담아서 첫번째 매개변수로 전달
+        mutationFn: ({id, product}) => updateProductApi(id, product),
+        onSuccess: () => {
+            // get요청으로 받아온 데이터 무효화(키를 전달)
+            queryClient.invalidateQueries({queryKey: ["getAllProduct"]})
+        }
+    });
+
+}
+    
+const deleteProductApi = async (id) => {
+     const url = `http://localhost:8080/product/${id}`
+    const response = await axios.delete(url);
+    return response.data;
+}
+
+export const useDeleteProduct = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id) => deleteProductApi(id),
+        onSuccess: () => {
+          queryClient.invalidateQueries({queryKey: ["getAllProduct"]})
+        }
+    });
+}
+
+
+
