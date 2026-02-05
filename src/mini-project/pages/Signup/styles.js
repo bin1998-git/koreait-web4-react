@@ -56,6 +56,7 @@ export const formBox = css`
 
 export const btn = css`
     padding: 12px;
+    margin-top: 10px;
     font-size: 14px;
     font-weight: 500;
     background-color: #2d80e5;
