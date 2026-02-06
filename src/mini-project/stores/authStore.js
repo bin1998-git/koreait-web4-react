@@ -12,7 +12,7 @@ export const useAuthStore = create((set) => {
     const accessToken = localStorage.getItem("accessToken")
     
     return {
-        isAuthenticated: true, // token존재시 true
+        isAuthenticated: !!accessToken, // token존재시 true
         accessToken: accessToken,
 
         // 로그인, 로그아웃 mutation에서 onSuccess시 호출될것
@@ -30,6 +30,21 @@ export const useAuthStore = create((set) => {
                 isAuthenticated: false,
                 accessToken: null
             })
+        },
+
+        // 토큰업데이트 - 인터셉터용
+        setToken: (newAccessToken) => {
+            // 새로받아온 토큰이 있다면
+            if (newAccessToken) {
+                localStorage.setItem("accessToken", newAccessToken);
+            } else { // 없다면
+                console.log("리프레쉬 실패");
+                localStorage.removeItem("accessToken");
+            }
+
+            set({accessToken: newAccessToken,
+                 isAuthenticated: !!accessToken});
         }
+
     }
 });

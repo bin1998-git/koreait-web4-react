@@ -79,9 +79,9 @@ export default function Signup() {
         const {passwordConfirm, ...signupDto} = formVal;
         mutate(signupDto, {
             onError: (error) => {
-                const adiviceError = error.response.data;
+                const adiviceError = error?.response?.data;
                 if(
-                    error.response.status === 400 && Array.isArray(adiviceError)
+                    error?.response?.status === 400 && Array.isArray(adiviceError)
                 ) 
                     {
                     let trimedError = {};

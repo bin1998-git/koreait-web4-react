@@ -1,4 +1,5 @@
 import Home from "../pages/Home/Home"
+import Mypage from "../pages/MyPage/Mypage"
 import Signin from "../pages/Signin/Signin"
 import Signup from "../pages/Signup/Signup"
 
@@ -50,6 +51,6 @@ export const PROTECTED_ROUTES = [
     {
         id: "mypage",
         path: "/mypage",
-        element: <>마이페이지</>
+        element: <Mypage />
     }
 ]

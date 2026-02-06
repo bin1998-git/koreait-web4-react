@@ -1,4 +1,4 @@
-import {useMutation} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { signinAPI } from "../../../apis/endpoints/auth";
 import { useAuthStore } from "../../../stores/authStore";
 import { toast } from "react-toastify";
@@ -16,8 +16,8 @@ export const useSigninMutation = () => {
             toast.success("로그인성공");
         },
         onError: (error) => {
-            console.log(error.response.data);
-            const errorMsg = error.response.data;
+            console.log(error?.response?.data);
+            const errorMsg = error?.response?.data;
             console.log(errorMsg);
             // 토스토로 에러메세지
             toast.error(errorMsg);
