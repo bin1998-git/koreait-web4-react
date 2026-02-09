@@ -13,6 +13,7 @@ export const updateUserAPI = async (dto) => {
 
 // 마이페이지 패스워드 수정
 export const updatePasswordAPI = async (dto) => {
+     console.log("password dto:", dto);
     const response = await instance.patch("/user/me/password", dto);
     return response.data;
 }

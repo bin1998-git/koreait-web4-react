@@ -4,29 +4,46 @@ import * as s from "./styles";
 import EditPassword from "./components/EditPassword/EditPassword";
 import FormInput from "./components/FormInput/FormInput";
 import { useMyInfo } from "./hooks/useUserInfo";
+import { useRef } from "react";
+import { useProfileImage } from "./hooks/useMyPage";
+import { ClipLoader, GridLoader} from "react-spinners";
 
 
 export default function Mypage() {
     const [isPasswordMode, setIsPasswordMode] = useState(false);
-    const profileImg = ""; //나중에 api써서 교체
+    const {handleImgChange, profileImg} = useProfileImage();
     const { data: user, isLoading } = useMyInfo();
+    const fileInputRef = useRef(null);
 
     if(isLoading) {
-        <div css={s.container}>
-            <div>로딩중...</div>
-        </div>
+        // npm install react-spinners
+      return  (<div css={s.container}>
+            <ClipLoader 
+                color="#2d80e5"
+                size={60}
+            />
+            
+        </div>)
     }
 
   return (
     <div css={s.container}>
         <div css={s.myPageBox}>
             <div css={s.profileSection}>
-            <div css={s.imgWrapper}>
-                <div css={s.imageBox}>
+            <div 
+            css={s.imgWrapper}
+            onClick={() => fileInputRef.current.click()}
+            >
+                {/* 배열로 css cascading 가능 */}
+                {/* 뒷쪽 css가 기존 css 덮어씀 */}
+                <div css={[s.imageBox, s.imageBoxEditable]}>
                     {
                     profileImg 
                     ? <img src={profileImg} alt="프로필" /> 
-                    : <div css={s.imgPlaceholder}>? </div>
+                    : <div css={s.imgPlaceholder}>{
+                        user?.name[0] || "?"
+                    }
+                     </div>
                     }
                 </div>
             </div>
@@ -41,14 +58,19 @@ export default function Mypage() {
             <div css={s.formSection}>
                 {
                 isPasswordMode
-                ? <EditPassword />
-                : <FormInput />
+                ? <EditPassword 
+                closeEdit={() => setIsPasswordMode(false)}/>
+                : <FormInput 
+                setIsPasswordMode={setIsPasswordMode}/>
                 }
             </div>
             <input 
             type="file" 
             accept="image/*"
-
+            css={s.hiddenInput}
+            ref={fileInputRef}
+            // 파일업로드: Change 이벤트
+            onChange={handleImgChange}
             />
         </div>
     </div>

@@ -1,12 +1,15 @@
+/** @jsxImportSource @emotion/react */
 import { useForm } from "../../../../hooks/useForm"
 import { useQueryClient } from '@tanstack/react-query';
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react'
+import { useUpdateUser } from "../../hooks/useMyPage";
+import * as s from "./styles"
 
-export default function FormInput({isPasswordMode,
-    setIsPasswordMode}) {
+export default function FormInput({setIsPasswordMode}) {
     const [isEditMode, setIsEditMode] = useState(false);
+    const [errors, setErros] = useState({});
     
     const queryClient = useQueryClient();
     // useQuery쿼리키를 통해 캐싱된 전역데이터 가져오기 ok
@@ -15,6 +18,7 @@ export default function FormInput({isPasswordMode,
     name: "",
     email: ""
   });
+  const {mutate, isPending} = useUpdateUser();
 
   // USER가 로드되는데 걸리는 시간존재
   useEffect(() => {
@@ -27,11 +31,33 @@ export default function FormInput({isPasswordMode,
     
   }, [user])
 
+  // 수정완료 버튼
+  const handleUpdateClick = () => {
+    if (isPending) return;
+    // validation
+    mutate(formVal, {
+        onSuccess: () => setIsEditMode(false),
+        onError: () => {
+        // validation 에러
+        if (
+            error.response.status === 400 
+            && Array.isArray(error.response.data)
+        ) {
+            let backendError = {};
+            for (let errorObj of error.response.data) {
+                backendError = {...backendError, ...errorObj};
+                setErros(backendError);
+            }
+        }
+        }
+    });
+  }
+
   return (
     <>
-        <div>
-            <label>이름</label>
-            <input 
+        <div css={s.inputGroup}>
+            <label css={s.label}>이름</label>
+            <input css={s.input(isEditMode)}
             type="text" 
             name='name'
             value={formVal.name}
@@ -39,10 +65,11 @@ export default function FormInput({isPasswordMode,
             placeholder='이름을 입력하세요'
             disabled={!isEditMode}
             />
+            {errors.name && <div css={s.errorMesage}>{errors.name}</div>}
         </div>
-        <div>
-            <label>이메일</label>
-            <input 
+        <div css={s.inputGroup}>
+            <label css={s.label}>이메일</label>
+            <input css={s.input(isEditMode)}
             type="email" 
             name='email'
             value={formVal.email}
@@ -50,19 +77,33 @@ export default function FormInput({isPasswordMode,
             placeholder='이메일을 입력하세요'
             disabled={!isEditMode}
             />
+             {errors.email && <div css={s.errorMesage}>{errors.email}</div>}
         </div>
-            <button onClick={() => setIsPasswordMode(true)}>
+            <button onClick={() => setIsPasswordMode(true)}
+                css={s.changePasswordButton}>
                 비밀번호 변경
              </button>
         {
             isEditMode
-            ? (<div>
-                <button onClick={() => setIsEditMode(false)}>
+            ? (
+            <div css={s.buttonGroup}>
+                <button 
+                css={s.cancelButton}
+                onClick={() => setIsEditMode(false)}
+                disabled={isPending}
+                >
                  취소하기
                  </button>
-                <button>수정완료</button>
+                <button
+                 css={s.saveButton}
+                 onClick={handleUpdateClick}
+                 disabled={isPending}
+                >수정완료</button>
             </div>)
-            : <button onClick={() => setIsEditMode(true)}>
+            : <button 
+            onClick={() => setIsEditMode(true)}
+            css={s.editButton}
+            >
                 수정하기
                 </button>
             
